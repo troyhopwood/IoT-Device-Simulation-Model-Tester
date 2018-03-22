@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<style>
+	body{
+		background-color: #000;
+		color: #CCC;
+		text-align: left; 
+		padding-left: 15px; 
+		font-family: Helvetica, Arial, Sans-Serif;
+	}
+	
+	.button{
+		border: 1px solid #444;
+		background-color: #444;
+		color: #CCC;
+		padding: 7px;
+		border-radius:5px;
+	}
+	.button:hover{
+		color: #FFF;
+		cursor: pointer;
+	}
+	hr{
+		border-color: #555;
+		border-top: 0px;
+		width: 99%;
+	}
+	#deviceState{
+		color: #555;
+		background-color: #DDD;
+		width: 99%;
+		padding: 5px;
+		border: 0px;
+		border-radius:5px;
+	}
+	#context{
+		color: #555;
+		background-color: #DDD;
+		width: 99%;
+		padding: 5px;
+		border: 0px;
+		border-radius:5px;
+	}
+	#drop_zone {
+		font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+		border: 2px dashed #555;
+		padding: 25px;
+		text-align: center;
+		font: 20pt bold 'Vollkorn';
+		color: #AAA;
+		width: 96%;
+		border-radius:10px;
+		background-color: #222;
+	}
+	#drop_zone.hover { 
+		border-color: #AAA; 
+	}
+	#drop_zone.exit { 
+		border-color: #AAA; 
+	}
+	#form{
+		position: fixed;
+		left: 10px;
+		bottom: 0px;
+		height: 195px;
+		width: 99%;
+		visibility: hidden;
+		background-color: #000;
+	}
+	#spacer{
+		height:200px;
+	}
+	</style>
+</head>
+<body>
+	<noscript>You need to enable JavaScript to run this app.</noscript>
+	
+	<div id="drop_zone">Drop Device Model JSON and JS Files Here</div> 
+	
+	<div id="content">
+		<p id="Model"></p>
+		<p id="Values"></p>
+		<p id="Message"></p>
+		<br/>
+		<p id="Log"></p>
+		<p id="status"></p>
+		<div id="spacer">&nbsp;</div>
+	</div>
+
+	<div id="form">
+		<br/><hr><br/>
+		Device State:<br/>
+		<input type="text" value="" id="deviceState" name="deviceState"/><br/>
+		Context:<br/>
+		<input type="text" value="" id="context" name="context"/><br/><br/>
+		<input type="submit" class="button" value="Clear State" onClick="clearState(); return false;" /> &nbsp;&nbsp;&nbsp; <input type="submit" class="button" value="Run Test" onClick="clearLogs(); executeTest(); return false;" />
+	</div>
+	
+
+	<script language = "JavaScript">
+	var values;
+	var modelJSON;
+	var deviceModel;
+	var content = "";
+	var logMessages = "";
+	var json;
+	var values;
+	var drop_zone = document.getElementById('drop_zone');
+	var deviceModelName;
+	var context = {
+				currentTime:"",
+				deviceId:"",
+				deviceModel:""
+			}
+    status = document.getElementById('status');
+	
+	/** Dynamically insert the JavaScript file */
+	function addCode(code){
+		var JS= document.createElement('script');
+		JS.text= code;
+		document.body.appendChild(JS);
+	}
+	
+	/**Function to run the actual test of the Javascript and JSON files. */
+	function executeTest(){
+		content = "<h2>Device State:</h2>";
+		logMessages = "<h2>Log Messages:</h2><ul>";
+	
+		if(document.getElementById('deviceState').value == ""){ //Running test with default state
+			values = main();
+		}
+		else{ //Running test with previous state
+			context = JSON.parse(document.getElementById("context").value);
+			var deviceState = JSON.parse(document.getElementById("deviceState").value);
+			values = main(context,deviceState);
+		}
+		
+		document.getElementById("deviceState").value = JSON.stringify(values);
+		
+		/** Loop through all the device state values in the array */
+		for (i=0; i < Object.keys(values).length; i++){
+		 content = content + "<b>" + Object.keys(values)[i] + ":</b> " + Object.values(values)[i] + "<br />";
+		}
+
+		document.getElementById("Values").innerHTML = content;
+		
+		deviceModel = JSON.parse(modelJSON);
+
+		document.getElementById("Message").innerHTML = "<h2>Message:</h2>" + replaceTokens(deviceModel.Telemetry[0].MessageTemplate);
+		document.getElementById("Model").innerHTML = "<h2>Device Model Details</h2><strong>Name:</strong> " + deviceModel.Name + "<br/><strong>Description:</strong> " + deviceModel.Description + "<br/><strong>Version:</strong> " + deviceModel.Version;
+		
+		context.currentTime = new Date();
+		context.deviceId = "ModelTester";
+		context.deviceModel = deviceModel.Name;
+
+		
+		document.getElementById("context").value = JSON.stringify(context);
+	}
+	
+	/**On hover Function for dragging and dropping files */
+	drop_zone.ondragover = function () { this.className = 'hover'; return false; };
+	
+	/** On exit Function for dragging and dropping files */
+	drop_zone.ondragend = function () { this.className = 'exit'; return false; };
+	
+	/** Handling when files are actually dropped onto the page */
+	drop_zone.ondrop = function (e) {
+	  e.preventDefault();
+	  
+	  document.getElementById('form').style.visibility = "visible";
+	  document.getElementById('deviceState').value = "";
+	  document.getElementById("Values").innerHTML = "";
+	  document.getElementById("Message").innerHTML = "";
+	  document.getElementById("Log").innerHTML = "";
+	  
+	  var files = e.dataTransfer.files; 
+	   
+	   for (var i = 0, file; file = files[i]; i++) {
+			var fileName = file.name;
+			
+			if(fileName.indexOf(".json") > 0){
+				reader = new FileReader();
+				reader.onload = function (event) {
+					modelJSON = event.target.result;
+				};
+				reader.readAsText(file);
+			}	
+			else if(fileName.indexOf(".js") > 0){
+				reader = new FileReader();
+				reader.onload = function (event) {
+					addCode(event.target.result);
+				};
+				reader.readAsText(file);
+				}
+			else{
+				status.innerHTML = "Unknown file type.";
+			}
+		}
+		
+		return false;
+	}
+	
+	
+	/** Display any log messages from the JavaScript file to the browser */
+	function log(message){
+		logMessages = logMessages + "<li>" + message + "</li>";
+		document.getElementById("Log").innerHTML = logMessages + "</ul>";
+	}
+		
+	function clearLogs(){
+		logMessages = "<h2>Log Messages:</h2><ul>";
+		document.getElementById("Log").innerHTML = logMessages;
+	}
+	
+	/** Replace variables in the message template with their actual values */
+	function replaceTokens(message) {
+		return message.split('${').map(function(i) { 
+			var element = i.substring(0, i.indexOf('}')).trim(); 
+			return i.replace(element + '}', "<nobr>" + values[element] + "</nobr>"); 
+		}).join('');
+	}
+	
+	/** Clear the state text box to allow for running without previous state */
+	function clearState(){
+		document.getElementById("deviceState").value = "";
+	}
+
+	</script>
+</body>
+</html>

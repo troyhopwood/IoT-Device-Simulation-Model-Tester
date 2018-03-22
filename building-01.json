@@ -1,0 +1,47 @@
+{
+  "SchemaVersion": "1.0.0",
+  "Id": "building-01",
+  "Version": "0.0.1",
+  "Name": "building",
+  "Description": "Sample telemetry from a building gateway.",
+  "Protocol": "MQTT",
+  "Simulation": {
+    "InitialState": {
+      "GatewayName": "",
+      "Timestamp": "",
+      "DeviceName": "",
+      "ObjectType": "",
+      "ObjectName": "",
+      "ObjectDescription": "",
+      "Instance": "",
+      "PresentValue": ""
+    },
+    "Interval": "00:00:10",
+    "Scripts": [
+      {
+        "Type": "javascript",
+        "Path": "building-01-state.js"
+      }
+    ]
+  },
+  "Telemetry": [
+    {
+      "Interval": "00:00:10",
+      "MessageTemplate": "{\"GatewayName\":\"${GatewayName}\",\"Timestamp\":\"${Timestamp}\",\"Asset\": {\"DeviceName\":\"${DeviceName}\",\"ObjectType\":\"${ObjectType}\",\"ObjectName\":\"${ObjectName}\",\"ObjectDescription\":\"${ObjectDescription}\",\"Instance\":\"${Instance}\",\"PresentValue\":\"${PresentValue}\"}}",
+      "MessageSchema": {
+        "Name": "building-sensors;v1",
+        "Format": "JSON",
+        "Fields": {
+          "GatewayName": "text",
+          "Timestamp": "text",
+          "DeviceName": "text",
+          "ObjectType": "text",
+          "ObjectName": "text",
+          "ObjectDescription": "text",
+          "Instance": "text",
+          "PresentValue": "text"
+        }
+      }
+    }
+  ]
+}
