@@ -193,7 +193,7 @@ function main(context, previousState) {
 		state.Temperature = "";
 		state.Humidity = "";
 	}
-    return state;
+    updateState(state);
 }
 
 /**
