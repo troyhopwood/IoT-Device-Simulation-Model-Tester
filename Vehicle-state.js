@@ -2438,7 +2438,7 @@ function main(context, previousstate) {
 				state.SpeedLevel = "Off";
 				}
 	}
-    return state;
+    updateState(state);
 }
 
 /**
