@@ -49,7 +49,7 @@
 		text-align: center;
 		font: 20pt bold 'Vollkorn';
 		color: #AAA;
-		width: 96%;
+		width: 94%;
 		border-radius:10px;
 		background-color: #222;
 	}
@@ -118,7 +118,7 @@
 	/** Dynamically insert the JavaScript file */
 	function addCode(code){
 		var JS= document.createElement('script');
-		JS.text= code;
+		JS.text= code.replace("updateState(state)","return state");
 		document.body.appendChild(JS);
 	}
 	
@@ -128,11 +128,15 @@
 		logMessages = "<h2>Log Messages:</h2><ul>";
 	
 		if(document.getElementById('deviceState').value == ""){ //Running test with default state
+			<!-- main(); -->
+			<!-- values = state; -->
 			values = main();
 		}
 		else{ //Running test with previous state
 			context = JSON.parse(document.getElementById("context").value);
 			var deviceState = JSON.parse(document.getElementById("deviceState").value);
+			<!-- main(context,deviceState); -->
+			<!-- values = state; -->
 			values = main(context,deviceState);
 		}
 		
@@ -206,6 +210,11 @@
 	function log(message){
 		logMessages = logMessages + "<li>" + message + "</li>";
 		document.getElementById("Log").innerHTML = logMessages + "</ul>";
+	}
+	
+	function updateState(state){
+		alert("Got Here");
+		return state;
 	}
 		
 	function clearLogs(){

@@ -1,0 +1,75 @@
+{
+  "SchemaVersion": "1.0.0",
+  "Id": "FitnessTracker",
+  "Version": "1.0.0",
+  "Name": "FitnessTracker",
+  "Description": "Demo script for an IoT-based fitness tracker",
+  "Protocol": "AMQP",
+  "Simulation": {
+    "InitialState": {
+      "SimulatedActivityLevel": "",
+      "Heartrate": "",
+	  "TrackingEnabled": "",
+      "Latitude": "",
+	  "Longitude": "",
+      "Movement": "",
+      "Steps": "",
+      "Temperature": "",
+	  "Humidity": "",
+	  "BatteryLevel": ""
+    },
+    "Interval": "00:00:10",
+    "Scripts": [
+      {
+        "Type": "javascript",
+        "Path": "FitnessTracker-state.js"
+      }
+    ]
+  },
+      "Properties": {
+        "Type": "Tracker",
+        "Firmware": "1.0",
+        "Location": "Rigth Wrist"
+    },
+    "Tags": {
+        "Model": "FT101"
+    },
+  "Telemetry": [
+    {
+      "Interval": "00:00:01",
+      "MessageTemplate": "{\"Heartrate\":\"${Heartrate}\",\"TrackingEnabled\":\"${TrackingEnabled}\",\"Latitude\":\"${Latitude}\",\"Longitude\":\"${Longitude}\",\"Movement\":\"${Movement}\",\"Steps\":\"${Steps}\",\"Temperature\":\"${Temperature}\",\"Humidity\":\"${Humidity}\",\"BatteryLevel\":\"${BatteryLevel}\"}}",
+      "MessageSchema": {
+        "Name": "FitnessTracker-Sensors;v1",
+        "Format": "JSON",
+        "Fields": {
+          "Heartrate": "integer",
+          "TrackingEnabled": "integer",
+          "Latitude": "Double",
+		  "Longitude": "Double",
+          "Movement": "integer",
+          "Steps": "integer",
+          "Temperature": "double",
+		  "Humidity": "double",
+		  "BatteryLevel": "integer"
+        }
+      }
+    }
+  ],
+
+  "CloudToDeviceMethods": {
+      "FirmwareUpdate": {
+        "Type": "javascript",
+        "Path": "FirmwareUpdate-method.js"
+      },
+      "StopTracking": {
+        "Type": "javascript",
+        "Path": "StartTracking-method.js"
+      },
+      "StartTracking": {
+        "Type": "javascript",
+        "Path": "StopTracking-method.js"
+      }
+
+  }
+
+}

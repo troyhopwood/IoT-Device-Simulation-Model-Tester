@@ -1,0 +1,94 @@
+{
+  "SchemaVersion": "1.0.0",
+  "Id": "Vehicle-01",
+  "Version": "0.0.1",
+  "Name": "Vehicle",
+  "Description": "Demo script for a connected vehicle",
+  "Protocol": "AMQP",
+  "Simulation": {
+    "InitialState": {
+    "SpeedLevel": "",
+    "FuelLevel": "",
+    "Latitude": "",
+    "Longitude": "",
+    "TrackPoint": "",
+    "InteriorTemperature": "",
+    "ExteriorTemperature": "",
+    "Environment": "",
+    "BatteryHealth": "",
+    "Odometer": "",
+    "TripOdometer": "",
+    "ODBII": "",
+    "Speed": "",
+    "Distance": "",
+    "MPG": ""
+    },
+    "Interval": "00:00:10",
+    "Scripts": [
+      {
+        "Type": "javascript",
+        "Path": "Vehicle-state.js"
+      }
+    ]
+  },
+      "Properties": {
+        "Firmware": "1.0",
+        "LastService": "5/1/2018"
+    },
+    "Tags": {
+        "Model": "XG50"
+    },
+  "Telemetry": [
+    {
+      "Interval": "00:00:10",
+      "MessageTemplate": "{\"FuelLevel\":\"${FuelLevel}\",\"Speed\":\"${Speed}\",\"Distance\":\"${Distance}\",\"MPG\":\"${MPG}\",\"ODBII\":\"${ODBII}\",\"Latitude\":\"${Latitude}\",\"Longitude\":\"${Longitude}\",\"Odometer\":\"${Odometer}\",\"TripOdometer\":\"${TripOdometer}\",\"InteriorTemperature\":\"${InteriorTemperature}\",\"BatteryHealth\":\"${BatteryHealth}\"\"ExteriorTemperature\":\"${ExteriorTemperature}\"}}",
+      "MessageSchema": {
+        "Name": "Car-Sensors;v1",
+        "Format": "JSON",
+        "Fields": {
+          "FuelLevel": "integer",
+          "Latitude": "Double",
+          "Longitude": "Double",
+          "InteriorTemperature": "integer",
+          "ExteriorTemperature": "integer",
+          "BatteryHealth": "String",
+          "Odometer": "Double",
+          "TripOdometer": "Double",
+          "ODBII": "String",
+          "Speed": "Double",
+          "Distance": "Double",
+          "MPG": "Double"
+        }
+      }
+    }
+  ],
+
+  "CloudToDeviceMethods": {
+      "FirmwareUpdate": {
+        "Type": "javascript",
+        "Path": "FirmwareUpdate-method.js"
+      },
+      "UnlockDoors": {
+        "Type": "javascript",
+        "Path": "UnlockDoor-method.js"
+      },
+      "LockDoors": {
+        "Type": "javascript",
+        "Path": "LockDoors-method.js"
+      },
+      "StartVehicle": {
+        "Type": "javascript",
+        "Path": "StartVehicle-method.js"
+      },
+      "PreConditionInterior": {
+        "Type": "javascript",
+        "Path": "PreConditionInterior-method.js"
+      },
+      "LocateVehicle": {
+        "Type": "javascript",
+        "Path": "LocateVehicle-method.js"
+      }
+
+  }
+
+}
