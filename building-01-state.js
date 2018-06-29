@@ -68,7 +68,7 @@ function main(context, previousState) {
 		state.PresentValue = vary(75, 5, 25, 100);
 	}
 
-    return state;
+    updateState(state);
 }
 
 /**
