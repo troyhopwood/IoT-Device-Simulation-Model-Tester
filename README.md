@@ -9,8 +9,7 @@ Drag and drop device model JSON files and the corresponding JavaScript behavior 
 to validate your model and behaviors are working as expected. You no longer need to
 deploy them, evaluate telemetry and repeat until things work.
 
-This project includes a sample Model file (building-01.json) and a sample behavior
-file (building-01-state.js)
+This project includes a some sample devices for a building, vehicle and fitness tracker. The devices consist of a model (JSON) and a behavior script (JS).
 
 ## How to use the tester
 
