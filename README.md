@@ -19,18 +19,15 @@ The Device Model Tester is a static HTML file. It uses JavaScript to perform it'
 so it will work in any browser.
 
 1. Open ModelTester.htm in a web browser
-2. Drag your device model JSON file and your behavior JAVASCRIPT file to the box on the page.
+2. Drag your device definition JSON file, your behavior JavaScript file and any JavaScript files for your device methods to the box on the page.
 3. Click "Run Test" at the bottom of the page.
 4. Each time you click "Run Test" it will execute the main() function in your JavaScript file.
+5. Buttons will also be generated for each device method in your JSON device definition file.
 
 Note: Unless you explicitly clear the device state by clicking the "Clear State" button, the
 test will run using the displayed device state.
 
 You can edit the Device State and/or Context as needed to test various scenarios.
-
-Known Issues:
-- No support for Methods
-- No support for multiple Telemetry entries in the JSON file
 
 ## Screenshots
 
