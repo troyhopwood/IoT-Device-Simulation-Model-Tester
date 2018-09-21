@@ -11,6 +11,8 @@ deploy them, evaluate telemetry and repeat until things work.
 
 This project includes a some sample devices for a building, vehicle and fitness tracker. The devices consist of a model (JSON) and a behavior script (JS).
 
+<a href="https://troyhopwood.github.io/IoT-Device-Simulation-Model-Tester/" class="button big">Try It Now</a>
+
 ## How to use the tester
 
 The Device Model Tester is a static HTML file. It uses JavaScript to perform it's magic
