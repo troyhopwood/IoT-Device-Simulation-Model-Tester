@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 	<style>
 	body{
 		background-color: #000;
@@ -11,14 +12,31 @@
 	}
 	
 	.button{
-		border: 1px solid #444;
-		background-color: #444;
+		border: 1px solid #0066FF;
+		background-color: #0066FF;
+		color: #CCC;
+		padding: 7px;
+		border-radius:5px;
+	}
+	.disabledButton{
+		border: 1px solid #888;
+		background-color: #888;
 		color: #CCC;
 		padding: 7px;
 		border-radius:5px;
 	}
 	.button:hover{
 		color: #FFF;
+		cursor: pointer;
+	}
+	a{
+		color: #2874A6;
+		cursor: pointer;
+		text-decoration: none;
+		font-size: 15px;
+	}
+	a:hover{
+		color: #CCC;
 		cursor: pointer;
 	}
 	hr{
@@ -71,21 +89,107 @@
 	#spacer{
 		height:200px;
 	}
+	/* The Modal (background) */
+	.modal {
+		display: none; /* Hidden by default */
+		position: fixed; /* Stay in place */
+		z-index: 1; /* Sit on top */
+		padding-top: 100px; /* Location of the box */
+		left: 0;
+		top: 0;
+		width: 100%; /* Full width */
+		height: 100%; /* Full height */
+		overflow: auto; /* Enable scroll if needed */
+		background-color: rgb(0,0,0); /* Fallback color */
+		background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+	}
+
+	/* Modal Content */
+	.modal-content {
+		background-color: #922B21;
+		margin: auto;
+		padding: 20px;
+		border: 1px solid #922B21;
+		width: 30%;
+		color: #FFF;
+	}
+
+	/* The Close Button */
+	.close {
+		color: #FFF;
+		float: right;
+		font-size: 28px;
+		font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+		color: #000;
+		text-decoration: none;
+		cursor: pointer;
+	}
 	</style>
+
 </head>
 <body>
 	<noscript>You need to enable JavaScript to run this app.</noscript>
-	
-	<div id="drop_zone">Drop Device Model JSON and JS Files Here</div> 
-	
 	<div id="content">
 		<p id="Model"></p>
-		<p id="Values"></p>
 		<p id="Message"></p>
+		<p id="Values"></p>
+		<p id="Properties"></p>
+		<p id="Tags"></p>
+		<p id="Methods"></p>
 		<br/>
 		<p id="Log"></p>
-		<p id="status"></p>
+		
+		<div id="myModal" class="modal">
+		 <div class="modal-content">
+			<span class="close">&times;</span>
+			<p<p id="Status"></p>
+		  </div>
+		</div>
+  
+		
+		<div id="drop_zone"><i class="far fa-copy" style="font-size:35px;"></i> &nbsp;&nbsp;&nbsp; Drop Device Model JSON and JS Files Here &nbsp;&nbsp;&nbsp;  <i class="far fa-copy" style="font-size:35px;"></i></div> 
+	
+		<div id="quickstart" style="text-align:center; color:#2874A6; margin:auto; width:80%;">
+		<br/><br/><br/><br/>
+			<table border="0" cellpadding="40" cellspacing="0" width="95%">
+				<tr>
+					<td colspan=3 style="color:#CCCCCC; font-size: 25px;">
+						Remove the guesswork from authoring device models for use with Microsoft Azure IoT Device Simulation and see exactly how your device model behaves without the need to be hooked up to an IoT Hub.
+					</td>
+					<tr>
+					<td text-align="center" valign="top">
+						<i class="far fa-hand-point-up" style="font-size:150px;"></i>
+						<br/><br/><span style="color:#CCCCCC;">
+						Drag and drop your JSON device definition file and all associated JavaScript files all at once.
+						</span>
+					</td>
+					<td text-align="center" valign="top">
+						<i class="far fa-paper-plane" style="font-size:150px;"></i>
+						<br/><br/><span style="color:#CCCCCC;">
+						Take your device model for a spin. See how your scripts manipulate values and see the message payload.
+						</span><br/><br/><br/><br/><br/><br/>
+						<p style="color:#CCC;font-size:30px;">
+							<i class="fas fa-microchip"></i><br/><a href="https://www.azureiotsolutions.com">Deploy Device Simulation</a>
+						</p>
+						<p style="color:#CCC;font-size:30px;">
+							<i class="fab fa-github"></i><br/><a href="https://github.com/Azure/azure-iot-pcs-device-simulation">See Device Simulation in GitHub</a>
+						</p>
+					</td>
+					<td text-align="center" valign="top">
+						<i class="fas fa-redo" style="font-size:150px;"></i>
+						<br/><br/><span style="color:#CCCCCC;">
+						Test methods, context, state, and properties then iterate until you’re ready to deploy to Device Simulation.
+					</span>
+					</td>
+				</tr>
+			</table>
+		</div>
 		<div id="spacer">&nbsp;</div>
+		
 	</div>
 
 	<div id="form">
@@ -94,34 +198,68 @@
 		<input type="text" value="" id="deviceState" name="deviceState"/><br/>
 		Context:<br/>
 		<input type="text" value="" id="context" name="context"/><br/><br/>
-		<input type="submit" class="button" value="Clear State" onClick="clearState(); return false;" /> &nbsp;&nbsp;&nbsp; <input type="submit" class="button" value="Run Test" onClick="clearLogs(); executeTest(); return false;" />
+		<table border="0" cellpadding="0" cellspacing="0" width="99%"><tr><td align="left">
+		<input id="Clear" type="submit" class="disabledButton" value="Clear State" onClick="clearState(); return false;" disabled /> &nbsp;&nbsp;&nbsp; <input type="submit" class="button" value="Run Test" onClick="clearLogs(); executeTest(); return false;" /></td><td align="right"><input type="button" class="button" value="Reset App" onClick="window.location.reload()"></td></tr></table>
 	</div>
 	
 
 	<script language = "JavaScript">
 	var values;
 	var modelJSON;
-	var deviceModel;
+	var deviceModel = "";
 	var content = "";
 	var logMessages = "";
 	var json;
-	var values;
 	var drop_zone = document.getElementById('drop_zone');
 	var deviceModelName;
+	var script = "";
+	var contents;
+	var jsonIndex = -1;
 	var context = {
 				currentTime:"",
 				deviceId:"",
 				deviceModel:""
 			}
-    status = document.getElementById('status');
+    var status = document.getElementById('Status');
 	
 	/** Dynamically insert the JavaScript file */
 	function addCode(code){
-		var JS= document.createElement('script');
-		JS.text= code.replace("updateState(state)","return state");
+		var JS = document.createElement('script');
+		JS.text = code.replace("updateState(state)","return state");
+		/**if(type != "Behavior")
+		{
+			//alert("Type is not Behaviior. It is " + type);
+			JS.text = code.replace("function main(","function " + type + "("); //Rename Main() to avoid conflicts
+		}*/
 		document.body.appendChild(JS);
+		
+		//document.write(JS.text);
 	}
 	
+
+
+	
+	/**Function to run cloud to device methods */
+	function executeC2DMethod(objButton){
+		context = JSON.parse(document.getElementById("context").value);
+		var deviceState = JSON.parse(document.getElementById("deviceState").value);
+		values = window[objButton.value](context,deviceState);
+		
+		document.getElementById("deviceState").value = JSON.stringify(values);
+		
+		
+		/** Loop through all the device state values in the array */
+		content = "<h2>Device State:</h2>";
+		for (i=0; i < Object.keys(values).length; i++){
+		 content = content + "<b>" + Object.keys(values)[i] + ":</b> " + Object.values(values)[i] + "<br />";
+		}
+		//alert(Object.keys(values).length);
+		//document.getElementById("Values").innerHTML = "";
+		//alert(content);
+		document.getElementById("Values").innerHTML = content;
+	}
+	
+		
 	/**Function to run the actual test of the Javascript and JSON files. */
 	function executeTest(){
 		content = "<h2>Device State:</h2>";
@@ -134,6 +272,8 @@
 		}
 		else{ //Running test with previous state
 			context = JSON.parse(document.getElementById("context").value);
+			
+			
 			var deviceState = JSON.parse(document.getElementById("deviceState").value);
 			<!-- main(context,deviceState); -->
 			<!-- values = state; -->
@@ -142,6 +282,7 @@
 		
 		document.getElementById("deviceState").value = JSON.stringify(values);
 		
+		
 		/** Loop through all the device state values in the array */
 		for (i=0; i < Object.keys(values).length; i++){
 		 content = content + "<b>" + Object.keys(values)[i] + ":</b> " + Object.values(values)[i] + "<br />";
@@ -149,8 +290,37 @@
 
 		document.getElementById("Values").innerHTML = content;
 		
+		
+		//Get Device Properties
+		var props = deviceModel.Properties;
+		document.getElementById("Properties").innerHTML = "<h2>Device Properties</h2>";
+		for (var key in props) {
+			if (props.hasOwnProperty(key)) {
+				document.getElementById("Properties").innerHTML = document.getElementById("Properties").innerHTML + "<strong>" + key + ":</strong> " + props[key] +  "<br />";
+			}
+		}
+		
+		//Get Device Tags
+		var tags = deviceModel.Tags;
+		document.getElementById("Tags").innerHTML = "<h2>Device Tags</h2>";
+		for (var key in tags) {
+			if (tags.hasOwnProperty(key)) {
+				document.getElementById("Tags").innerHTML = document.getElementById("Tags").innerHTML + "<strong>" + key + ":</strong> " + tags[key] +  "<br />";
+			}
+		}
+		
 		deviceModel = JSON.parse(modelJSON);
 
+		//Get all the cloud to device methods listed in the JSON file
+		var c2dMethods = deviceModel.CloudToDeviceMethods;
+		document.getElementById("Methods").innerHTML = "<h2>Supported Methods</h2>";
+		for (var key in c2dMethods) {
+			if (c2dMethods.hasOwnProperty(key)) {
+				//alert(c2dMethods[key].Path);
+				document.getElementById("Methods").innerHTML = document.getElementById("Methods").innerHTML + "<input type=\"submit\" class=\"button\" value=\"" + key + "\" onClick=\"clearLogs(); executeC2DMethod(this); return false;\" />&nbsp;&nbsp;&nbsp;";
+			}
+		}
+		
 		document.getElementById("Message").innerHTML = "<h2>Message:</h2>" + replaceTokens(deviceModel.Telemetry[0].MessageTemplate);
 		document.getElementById("Model").innerHTML = "<h2>Device Model Details</h2><strong>Name:</strong> " + deviceModel.Name + "<br/><strong>Description:</strong> " + deviceModel.Description + "<br/><strong>Version:</strong> " + deviceModel.Version;
 		
@@ -160,6 +330,10 @@
 
 		
 		document.getElementById("context").value = JSON.stringify(context);
+		
+		document.getElementById("Clear").className="button";
+		document.getElementById("Clear").disabled = false;
+		
 	}
 	
 	/**On hover Function for dragging and dropping files */
@@ -173,36 +347,119 @@
 	  e.preventDefault();
 	  
 	  document.getElementById('form').style.visibility = "visible";
+	  document.getElementById('drop_zone').style.visibility = "hidden";
+	  document.getElementById('drop_zone').style.height = "0px;";
 	  document.getElementById('deviceState').value = "";
 	  document.getElementById("Values").innerHTML = "";
 	  document.getElementById("Message").innerHTML = "";
 	  document.getElementById("Log").innerHTML = "";
+	  document.getElementById("Methods").innerHTML = "";
+	  document.getElementById("quickstart").style.visibility = "hidden";
 	  
 	  var files = e.dataTransfer.files; 
-	   
-	   for (var i = 0, file; file = files[i]; i++) {
-			var fileName = file.name;
-			
-			if(fileName.indexOf(".json") > 0){
-				reader = new FileReader();
-				reader.onload = function (event) {
-					modelJSON = event.target.result;
-				};
-				reader.readAsText(file);
-			}	
-			else if(fileName.indexOf(".js") > 0){
-				reader = new FileReader();
-				reader.onload = function (event) {
-					addCode(event.target.result);
-				};
-				reader.readAsText(file);
-				}
-			else{
-				status.innerHTML = "Unknown file type.";
-			}
+	  
+	  //Make sure we process the JSON file first ALWAYS
+
+	  for (var i = 0, file; file = files[i]; i++) {
+		var fileName = file.name;
+		if(fileName.indexOf(".json") == -1 && fileName.indexOf(".js") == -1)
+		{
+			handleError("I don't know what to do with this file type. You will have better luck with .json and .js files.");
+			break;
 		}
 		
+		if(fileName.indexOf(".json") > 0){
+			jsonIndex = i;
+			reader1 = new FileReader();
+			reader1.onload = function (event) {
+				modelJSON = event.target.result;
+				deviceModel = JSON.parse(modelJSON);
+				//alert("Device Model: " + deviceModel);
+				processJavaScript(files);
+				document.getElementById("Model").innerHTML = "<h2>Device Model Details</h2><strong>Name:</strong> " + deviceModel.Name + "<br/><strong>Description:</strong> " + deviceModel.Description + "<br/><strong>Version:</strong> " + deviceModel.Version;
+				document.getElementById('form').style.display = "visible";
+			}
+			reader1.readAsText(file);
+		}
+		if(jsonIndex == -1)
+			{
+				handleError("Without your device definition file (JSON file) I don't know what to do. Please include your JSON file.");
+				break;
+			}
+			break;
+	  }
 		return false;
+	}
+
+	/** Process any and all JavaScript files */
+	function processJavaScript(files){
+		for (var i = 0; i < files.length; i++) { //for multiple files          
+		if(i == jsonIndex) { continue; }
+		(function(file) {
+		
+			var fileName = file.name;
+			var reader = new FileReader();  
+			reader.onload = function(e) {  
+				// get file content  
+				var text = e.target.result; 
+				
+				
+				
+				//alert(deviceModel.Simulation.Scripts[0].Path);
+				var behaviorFile = deviceModel.Simulation.Scripts[0].Path;
+				var fileType = "Behavior";
+				
+				//Get the list of supported methods
+				var methodNames = [];
+				var methodFiles = [];
+				var c2dMethods = deviceModel.CloudToDeviceMethods;
+					
+				for (var key in c2dMethods) 
+					{
+						if (c2dMethods.hasOwnProperty(key)) {
+							methodNames.push(key);
+							methodFiles.push(c2dMethods[key].Path);
+						}
+					}
+					//alert("File Name: " + fileName);
+					if(fileName == behaviorFile) //This is the behavior file
+					{
+						//alert("This is the behavior file");
+						fileType = "Behavior";
+					}
+					else
+					{
+						var arrayLength = methodFiles.length;
+						for (var i = 0; i < arrayLength; i++) {
+							if(fileName == methodFiles[i]){
+								//alert("This is " + fileName);
+								fileType = methodNames[i];
+							}
+						}
+					}
+					
+					//alert("building Code - filetype = " + fileType);
+					buildCode(text, fileType);
+			}
+			reader.readAsText(file, "UTF-8");
+		})(files[i]);
+}
+	}
+	
+	
+	
+	function buildCode(code, fileType){
+	//alert("File type in BuildCode Function: " + fileType);
+		if(fileType != "Behavior")
+		{
+			//alert("Type is not Behavior. It is " + fileType);
+			code = code.replace("function main(","function " + fileType + "("); //Rename Main() for methods to avoid conflicts
+		}
+		
+		
+		//script = script + code;
+		addCode(code);
+		//alert("Code added: " + script);
 	}
 	
 	
@@ -213,10 +470,11 @@
 	}
 	
 	function updateState(state){
-		alert("Got Here");
+		//alert("Got Here");
 		return state;
 	}
-		
+	
+    /** Remove all log messages */	
 	function clearLogs(){
 		logMessages = "<h2>Log Messages:</h2><ul>";
 		document.getElementById("Log").innerHTML = logMessages;
@@ -234,7 +492,62 @@
 	function clearState(){
 		document.getElementById("deviceState").value = "";
 	}
+	
+	/** Fake a sleep function because Device Simulation supports it through C# integration */
+	function sleep(milliseconds) {
+	  var start = new Date().getTime();
+	  for (var i = 0; i < 1e7; i++) {
+		if ((new Date().getTime() - start) > milliseconds){
+		  break;
+		}
+	  }
+	}
+	
+	/** Update any existing property with a new value */
+	function updateProperty(key, value) {
+		var props = deviceModel.Properties;
+		
+		//TODO: Handle adding new properties
+		props[key] = value;
+		
+		//Now Update the UI
+		document.getElementById("Properties").innerHTML = "<h2>Device Properties</h2>";
+		for (var key in props) {
+			if (props.hasOwnProperty(key)) {
+				document.getElementById("Properties").innerHTML = document.getElementById("Properties").innerHTML + "<strong>" + key + ":</strong> " + props[key] +  "<br />";
+			}
+		}
+	}
+	
+	/** Generic function to render an error in a modal */
+	function handleError(error){
+		document.getElementById("Status").innerHTML = "<table border='0' cellspacing='15'><tr><td valign='top'><i class='fas fa-bomb' style='font-size:60px;'></i></td><td valign='top'><strong>ERROR:</strong><br/>" + error + "</td></tr></table>";
+		modal.style.display = "block";
+		document.getElementById('form').style.visibility = "hidden";
+		document.getElementById('drop_zone').style.visibility = "visible";
+		document.getElementById('quickstart').style.visibility = "visible";
+	}
+	
+	// Get the modal
+	var modal = document.getElementById('myModal');
 
+	// Get the button that opens the modal
+	var btn = document.getElementById("myBtn");
+
+	// Get the <span> element that closes the modal
+	var span = document.getElementsByClassName("close")[0];
+
+	// When the user clicks on <span> (x), close the modal
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+		if (event.target == modal) {
+			modal.style.display = "none";
+		}
+	}
 	</script>
 </body>
 </html>
